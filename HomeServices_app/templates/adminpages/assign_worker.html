@@ -1,0 +1,90 @@
+{% extends "adminpages/admin_header_footer.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-5 p-4 bg-white rounded shadow-sm">
+    <h1 class="text-center text-primary mb-4">User Registration Form</h1>
+
+    {{ msg }}
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Requested Service and User -->
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="service_name">Requested Service</label>
+                <input type="text" class="form-control" id="service_name" name="service_name" value="{{ req.service.Name }}" required>
+                <input type="hidden" name="service_id" value="{{ req.service.id }}">
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="user">User</label>
+                <input type="text" class="form-control" id="user" name="username" value="{{ req.user.admin.first_name }}" required>
+                <input type="hidden" name="user" value="{{ req.user.admin.id }}">
+            </div>
+        </div>
+
+        <!-- Problem Description -->
+        <div class="form-group">
+            <label for="Description">Problem Description</label>
+            <textarea class="form-control" id="Description" name="Description" rows="4" required>{{ req.Problem_Description }}</textarea>
+        </div>
+
+        <!-- Assign Worker -->
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="assigned_worker">Assign a Worker</label>
+                <select class="form-control" id="assigned_worker" name="assigned_worker" required>
+                    <option value="">Select Worker</option>
+                    {% if workers %}
+                        {% for records in workers %}
+                            <option value="{{ records.id }}">
+                                {{ records.admin.first_name }} {{ records.admin.last_name }}
+                                {% if records.designation %}({{ records.designation }}){% endif %}
+                                {% if not records.avalability_status %}(Busy){% endif %}
+                            </option>
+                        {% endfor %}
+                    {% else %}
+                        <option disabled>No workers available</option>
+                    {% endif %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="lastname">Contact</label>
+                <input type="text" class="form-control" id="lastname" name="lastname" value="{{ req.contact }}" required>
+            </div>
+        </div>
+
+        <!-- House No & Address -->
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="house_no">House No</label>
+                <input type="text" class="form-control" id="house_no" name="house_no" value="{{ req.House_No }}" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="address">Address</label>
+                <input type="text" class="form-control" id="address" name="address" value="{{ req.Address }}" required>
+            </div>
+        </div>
+
+        <!-- Pincode & City -->
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="pincode">Pincode</label>
+                <input type="text" class="form-control" id="pincode" name="pincode" value="{{ req.pin }}" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" name="city" value="{{ req.city.name }}" required>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    </form>
+</div>
+{% endblock %}
